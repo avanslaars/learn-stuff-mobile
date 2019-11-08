@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
-const ALL_DECKS = gql`
+export const ALL_DECKS = gql`
   {
     decks {
       id
@@ -25,8 +25,8 @@ export function DeckList() {
       {loading && <Text style={styles.text}>loading the decks</Text>}
       {data &&
         data.decks.map(deck => (
-          <View>
-            <Text key={deck.id}>{deck.name}</Text>
+          <View key={deck.id}>
+            <Text>{deck.name}</Text>
             {deck.cards.map(c => (
               <Text key={c.id}>{c.term}</Text>
             ))}
