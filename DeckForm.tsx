@@ -28,7 +28,7 @@ const CREATE_DECK = gql`
   }
 `
 
-function createDeckUpdater(cache, { data: { addDeck } }) {
+function onDeckUpdate(cache, { data: { addDeck } }) {
   const { deck } = addDeck
   const { decks } = cache.readQuery({ query: ALL_DECKS })
   cache.writeQuery({
@@ -41,7 +41,7 @@ export function DeckForm() {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [createDeck, { loading, data }] = useMutation(CREATE_DECK, {
-    update: createDeckUpdater
+    update: onDeckUpdate
   })
 
   useEffect(() => {

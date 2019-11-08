@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
@@ -22,7 +22,12 @@ export function DeckList() {
 
   return (
     <View style={styles.container}>
-      {loading && <Text style={styles.text}>loading the decks</Text>}
+      {loading && (
+        <>
+          <ActivityIndicator color="#3796fc" />
+          <Text style={styles.text}>loading the decks</Text>
+        </>
+      )}
       {data &&
         data.decks.map(deck => (
           <View key={deck.id}>
