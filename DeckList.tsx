@@ -1,21 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 import { useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
-
-export const ALL_DECKS = gql`
-  {
-    decks {
-      id
-      name
-      cardCount
-      cards {
-        id
-        term
-      }
-    }
-  }
-`
+import { ALL_DECKS } from './queries/all-decks'
 
 export function DeckList() {
   const { loading, error, data } = useQuery(ALL_DECKS)

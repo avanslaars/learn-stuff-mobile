@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
-import { ALL_DECKS } from './DeckList'
+import { ALL_DECKS } from './queries/all-decks'
 
 const CREATE_DECK = gql`
   mutation AddDeck($input: DeckInput!) {
@@ -30,25 +30,31 @@ const CREATE_DECK = gql`
 
 function onDeckUpdate(cache, { data: { addDeck } }) {
   const { deck } = addDeck
-  const { decks } = cache.readQuery({ query: ALL_DECKS })
+  const { decks } = cache.readQuery({
+    query: ALL_DECKS
+  })
   cache.writeQuery({
     query: ALL_DECKS,
     data: { decks: decks.concat(deck) }
   })
 }
 
-export function DeckForm() {
+export function DeckForm({ navigation }) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [createDeck, { loading, data }] = useMutation(CREATE_DECK, {
-    update: onDeckUpdate
+    update: onDeckUpdate,
+    onCompleted() {
+      clearForm()
+      navigation.goBack()
+    }
   })
 
-  useEffect(() => {
-    if (data) {
-      clearForm()
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data) {
+  //     clearForm()
+  //   }
+  // }, [data])
 
   function clearForm() {
     setName('')
@@ -56,7 +62,10 @@ export function DeckForm() {
   }
 
   function saveDeck() {
-    createDeck({ variables: { input: { name, description } } })
+    createDeck({
+      variables: { input: { name, description } }
+      // refetchQueries: ['allDecks']
+    })
   }
 
   return (
